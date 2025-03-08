@@ -32,7 +32,7 @@ where
     T: Pack,
 {
     let account =
-        T::unpack_unchecked(&mut &data[8..]).map_err(|_| AccountError::DeserializeSolanaAccount)?;
+        T::unpack_unchecked(&mut &data[..]).map_err(|_| AccountError::DeserializeSolanaAccount)?;
 
     Ok(account)
 }
