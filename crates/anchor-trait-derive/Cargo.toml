@@ -1,0 +1,27 @@
+[package]
+name                   = "anchor-trait-derive"
+description            = "Anchor Trait Derive"
+version.workspace      = true
+authors.workspace      = true
+homepage.workspace     = true
+readme.workspace       = true
+repository.workspace   = true
+license.workspace      = true
+edition.workspace      = true
+rust-version.workspace = true
+categories.workspace   = true
+keywords.workspace     = true
+
+[lib]
+proc-macro = true
+
+[features]
+
+[dependencies]
+syn         = "2.0"
+quote       = "1.0"
+proc-macro2 = "1.0"
+sha2        = { workspace = true }
+
+[lints]
+# workspace = true
