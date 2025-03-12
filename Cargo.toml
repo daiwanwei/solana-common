@@ -17,8 +17,10 @@ resolver = "2"
 members = [
   "crates/deserialize",
   "crates/anchor-trait",
-  "crates/anchor-trait-derive",
   "crates/account-fetcher",
+
+  "crates/anchor-derive/discriminator",
+  "crates/anchor-derive/instructions",
 ]
 
 [workspace.dependencies]
@@ -54,10 +56,18 @@ sha2                                = "0.10"
 bytes = "1"
 snafu = "0.8"
 
+# derive
+syn         = { version = "2.0", features = ["full"] }
+quote       = "1.0"
+proc-macro2 = "1.0"
+
+# crates of this Project
 solana-deserialize     = { path = "./crates/deserialize" }
 anchor-trait           = { path = "./crates/anchor-trait" }
-anchor-trait-derive    = { path = "./crates/anchor-trait-derive" }
 solana-account-fetcher = { path = "./crates/account-fetcher" }
+
+anchor-discriminator-derive = { path = "./crates/anchor-derive/discriminator" }
+anchor-instructions-derive  = { path = "./crates/anchor-derive/instructions" }
 
 [workspace.lints.rust]
 async_fn_in_trait = "allow"
