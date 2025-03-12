@@ -19,7 +19,7 @@ pub fn discriminator(args: TokenStream, input: TokenStream) -> TokenStream {
     let expanded = quote! {
         #account_strct
 
-        impl Discriminator for #name {
+        impl ::anchor_trait::Discriminator for #name {
             const DISCRIMINATOR: [u8; 8] = #discriminator;
         }
     };

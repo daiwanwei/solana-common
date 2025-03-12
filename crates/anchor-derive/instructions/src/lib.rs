@@ -25,11 +25,11 @@ pub fn instructions_derive(input: TokenStream) -> TokenStream {
         let discriminator = generate_discriminator(SIGHASH_GLOBAL_NAMESPACE, &name_in_snake_case);
 
         let impls = quote! {
-            impl Discriminator for #variant_ident {
+            impl ::anchor_trait::Discriminator for #variant_ident {
                 const DISCRIMINATOR: [u8; 8] = #discriminator;
             }
 
-            impl InstructionData for #variant_ident {}
+            impl ::anchor_trait::InstructionData for #variant_ident {}
         };
 
         let Fields::Named(FieldsNamed { named, .. }) = variant.fields else {
