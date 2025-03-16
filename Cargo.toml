@@ -18,6 +18,9 @@ members = [
   "crates/deserialize",
   "crates/anchor-trait",
   "crates/account-fetcher",
+  "crates/core",
+
+  "crates/core-derive/accounts",
 
   "crates/anchor-derive/discriminator",
   "crates/anchor-derive/instructions",
@@ -53,8 +56,13 @@ solana-program-pack                 = "2"
 sha2                                = "0.10"
 
 # misc
-bytes = "1"
-snafu = "0.8"
+bytes        = "1"
+convert_case = "0.6"
+
+# error handling
+anyhow    = "1"
+thiserror = "2"
+snafu     = "0.8"
 
 # derive
 syn         = { version = "2.0", features = ["full"] }
@@ -65,6 +73,9 @@ proc-macro2 = "1.0"
 solana-deserialize     = { path = "./crates/deserialize" }
 anchor-trait           = { path = "./crates/anchor-trait" }
 solana-account-fetcher = { path = "./crates/account-fetcher" }
+solana-common-core     = { path = "./crates/core" }
+
+solana-accounts-derive = { path = "./crates/core-derive/accounts" }
 
 anchor-discriminator-derive = { path = "./crates/anchor-derive/discriminator" }
 anchor-instructions-derive  = { path = "./crates/anchor-derive/instructions" }
