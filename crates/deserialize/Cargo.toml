@@ -15,17 +15,8 @@ keywords.workspace     = true
 [dependencies]
 borsh = { workspace = true }
 
-solana-account-decoder    = { workspace = true }
-solana-client             = { workspace = true }
-solana-program            = { workspace = true }
-solana-rpc-client         = { workspace = true }
-solana-rpc-client-api     = { workspace = true }
-solana-sdk                = { workspace = true }
-solana-transaction-status = { workspace = true }
-solana-account            = { workspace = true }
-solana-clock              = { workspace = true }
-solana-program-pack       = { workspace = true }
-spl-token                 = { workspace = true }
+solana-program      = { workspace = true }
+solana-program-pack = { workspace = true }
 
 snafu = { workspace = true }
 
