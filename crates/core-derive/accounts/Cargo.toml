@@ -23,7 +23,7 @@ quote       = { workspace = true }
 proc-macro2 = { workspace = true }
 
 [dev-dependencies]
-solana-sdk         = { workspace = true }
+solana-program     = { workspace = true }
 solana-common-core = { workspace = true }
 
 [lints]

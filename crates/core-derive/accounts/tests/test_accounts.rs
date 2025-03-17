@@ -1,14 +1,14 @@
 use solana_accounts_derive::ToAccountMetas;
 use solana_common_core::ToAccountMetas;
-use solana_sdk::pubkey::Pubkey;
+use solana_program::pubkey::Pubkey;
 
 #[derive(ToAccountMetas)]
 pub struct TransferAccounts {
-    #[account(mut, is_signer = true)]
+    #[account(mut, signer = true)]
     pub authority: Pubkey,
     #[account(mut)]
     pub from: Option<Pubkey>,
-    #[account(is_signer = false)]
+    #[account(signer = false)]
     pub to: Pubkey,
 }
 

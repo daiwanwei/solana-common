@@ -3314,7 +3314,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "solana-common-core",
- "solana-sdk",
+ "solana-program",
  "syn 2.0.99",
 ]
 

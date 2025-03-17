@@ -21,7 +21,6 @@ struct AccountAttr {
 
 fn is_option_type(ty: &Type) -> bool {
     if let Type::Path(type_path) = ty {
-        println!("type_path: {:?}", type_path);
         if let Some(segment) = type_path.path.segments.last() {
             if segment.ident == "Option" {
                 if let syn::PathArguments::AngleBracketed(args) = &segment.arguments {
@@ -61,9 +60,9 @@ fn impl_accounts(input: &syn::DeriveInput) -> TokenStream {
         };
 
         let meta_fn = if is_mut {
-            quote! { solana_sdk::instruction::AccountMeta::new }
+            quote! { solana_program::instruction::AccountMeta::new }
         } else {
-            quote! { solana_sdk::instruction::AccountMeta::new_readonly }
+            quote! { solana_program::instruction::AccountMeta::new_readonly }
         };
 
         if is_optional {
@@ -85,7 +84,7 @@ fn impl_accounts(input: &syn::DeriveInput) -> TokenStream {
 
     let expanded = quote! {
         impl solana_common_core::ToAccountMetas for #struct_name {
-            fn to_account_metas(&self) -> Vec<solana_sdk::instruction::AccountMeta> {
+            fn to_account_metas(&self) -> Vec<solana_program::instruction::AccountMeta> {
                 let mut accounts = Vec::new();
                 #(#account_pushes)*
                 accounts
@@ -113,7 +112,7 @@ fn parse_account_attr(attrs: &[Attribute]) -> AccountAttr {
         if let Err(err) = attr.parse_nested_meta(|meta| {
             if meta.path.is_ident("mut") {
                 account_attr.is_mut = true;
-            } else if meta.path.is_ident("is_signer") {
+            } else if meta.path.is_ident("signer") {
                 if meta.input.peek(Token![=]) {
                     let value: syn::LitBool = meta.value()?.parse()?;
                     account_attr.is_signer = value.value();
