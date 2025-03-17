@@ -19,6 +19,7 @@ members = [
   "crates/anchor-trait",
   "crates/account-fetcher",
   "crates/core",
+  "crates/instruction-builder",
 
   "crates/core-derive/accounts",
 
@@ -70,12 +71,12 @@ quote       = "1.0"
 proc-macro2 = "1.0"
 
 # crates of this Project
-solana-deserialize     = { path = "./crates/deserialize" }
-anchor-trait           = { path = "./crates/anchor-trait" }
-solana-account-fetcher = { path = "./crates/account-fetcher" }
-solana-common-core     = { path = "./crates/core" }
-
-solana-accounts-derive = { path = "./crates/core-derive/accounts" }
+solana-deserialize         = { path = "./crates/deserialize" }
+anchor-trait               = { path = "./crates/anchor-trait" }
+solana-account-fetcher     = { path = "./crates/account-fetcher" }
+solana-common-core         = { path = "./crates/core" }
+solana-instruction-builder = { path = "./crates/instruction-builder" }
+solana-accounts-derive     = { path = "./crates/core-derive/accounts" }
 
 anchor-discriminator-derive = { path = "./crates/anchor-derive/discriminator" }
 anchor-instructions-derive  = { path = "./crates/anchor-derive/instructions" }
