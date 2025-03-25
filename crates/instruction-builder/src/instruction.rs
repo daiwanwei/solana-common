@@ -23,25 +23,31 @@ impl InstructionBuilder {
         }
     }
 
-    pub fn add_named_accounts_from_struct<T: ToAccountMetas>(&mut self, accounts: T) {
-        self.add_named_accounts(accounts.to_account_metas());
+    pub fn add_named_accounts_from_struct<T: ToAccountMetas>(self, accounts: T) -> Self {
+        self.add_named_accounts(accounts.to_account_metas())
     }
 
-    pub fn add_named_accounts(&mut self, accounts: Vec<AccountMeta>) {
+    pub fn add_named_accounts(mut self, accounts: Vec<AccountMeta>) -> Self {
         self.named_accounts.extend(accounts);
+        self
     }
 
-    pub fn add_remaining_accounts(&mut self, accounts: Vec<AccountMeta>) {
+    pub fn add_remaining_accounts(mut self, accounts: Vec<AccountMeta>) -> Self {
         self.remaining_accounts.extend(accounts);
+        self
     }
 
-    pub fn add_data(&mut self, data: &[u8]) { self.data.extend(data); }
+    pub fn add_data(mut self, data: &[u8]) -> Self {
+        self.data.extend(data);
+        self
+    }
 
-    pub fn add_anchor_data<T: InstructionData>(&mut self, data: T) {
+    pub fn add_anchor_data<T: InstructionData>(mut self, data: T) -> Self {
         self.data.extend(data.data());
+        self
     }
 
-    pub fn build(&self) -> Instruction {
+    pub fn build(self) -> Instruction {
         let total_accounts = self.named_accounts.len() + self.remaining_accounts.len();
 
         let mut accounts = Vec::with_capacity(total_accounts);
