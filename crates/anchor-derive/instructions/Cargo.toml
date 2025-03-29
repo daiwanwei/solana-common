@@ -24,5 +24,11 @@ proc-macro2  = { workspace = true }
 sha2         = { workspace = true }
 convert_case = { workspace = true }
 
+[dev-dependencies]
+borsh = { workspace = true }
+
+solana-program = { workspace = true }
+anchor-trait   = { workspace = true }
+
 [lints]
 workspace = true
