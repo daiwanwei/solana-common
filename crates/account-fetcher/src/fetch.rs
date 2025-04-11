@@ -11,13 +11,14 @@ use solana_sdk::{commitment_config::CommitmentConfig, pubkey::Pubkey};
 use crate::{
     constants::MAX_FETCH_ACCOUNTS,
     error::{self, Result},
+    types::DecodedAccount,
 };
 
 pub async fn fetch_anchor_account<T>(
     client: &RpcClient,
     pubkey: Pubkey,
     commitment_config: CommitmentConfig,
-) -> Result<Option<(T, Slot)>>
+) -> Result<(Option<DecodedAccount<T>>, Slot)>
 where
     T: BorshDeserialize + Discriminator,
 {
@@ -31,7 +32,7 @@ pub async fn fetch_anchor_accounts<T>(
     client: &RpcClient,
     pubkeys: &[Pubkey],
     commitment_config: CommitmentConfig,
-) -> Result<Vec<Option<(T, Slot)>>>
+) -> Result<Vec<(Option<DecodedAccount<T>>, Slot)>>
 where
     T: BorshDeserialize + Discriminator,
 {
@@ -45,7 +46,7 @@ pub async fn fetch_solana_account<T>(
     client: &RpcClient,
     pubkey: Pubkey,
     commitment_config: CommitmentConfig,
-) -> Result<Option<(T, Slot)>>
+) -> Result<(Option<DecodedAccount<T>>, Slot)>
 where
     T: Pack,
 {
@@ -59,7 +60,7 @@ pub async fn fetch_solana_accounts<T>(
     client: &RpcClient,
     pubkeys: &[Pubkey],
     commitment_config: CommitmentConfig,
-) -> Result<Vec<Option<(T, Slot)>>>
+) -> Result<Vec<(Option<DecodedAccount<T>>, Slot)>>
 where
     T: Pack,
 {
@@ -101,17 +102,23 @@ pub async fn fetch_and_deserialize_account<T>(
     pubkey: Pubkey,
     commitment_config: CommitmentConfig,
     deserialize: impl Fn(&[u8]) -> Option<T>,
-) -> Result<Option<(T, Slot)>> {
+) -> Result<(Option<DecodedAccount<T>>, Slot)> {
     let res = client
         .get_account_with_commitment(&pubkey, commitment_config)
         .await
         .context(error::FetchAccountSnafu)?;
 
     let slot = res.context.slot;
-    let account =
-        res.value.and_then(|account| deserialize(&account.data).map(|account| (account, slot)));
-
-    Ok(account)
+    let account = res.value.and_then(|account| {
+        deserialize(&account.data).map(|data| DecodedAccount {
+            lamports: account.lamports,
+            owner: account.owner,
+            executable: account.executable,
+            rent_epoch: account.rent_epoch,
+            data,
+        })
+    });
+    Ok((account, slot))
 }
 
 pub async fn fetch_and_deserialize_accounts<T>(
@@ -119,16 +126,30 @@ pub async fn fetch_and_deserialize_accounts<T>(
     pubkeys: &[Pubkey],
     commitment_config: CommitmentConfig,
     deserialize: impl Fn(&[u8]) -> Option<T>,
-) -> Result<Vec<Option<(T, Slot)>>> {
+) -> Result<Vec<(Option<DecodedAccount<T>>, Slot)>> {
     if pubkeys.is_empty() {
         return Ok(vec![]);
     }
 
     let accounts = fetch_accounts(client, pubkeys, commitment_config).await?;
-    Ok(accounts
+
+    let accounts = accounts
         .into_iter()
         .map(|(account, slot)| {
-            account.and_then(|acc| deserialize(&acc.data).map(|account| (account, slot)))
+            (
+                account.and_then(|acc| {
+                    deserialize(&acc.data).map(|data| DecodedAccount {
+                        lamports: acc.lamports,
+                        owner: acc.owner,
+                        executable: acc.executable,
+                        rent_epoch: acc.rent_epoch,
+                        data,
+                    })
+                }),
+                slot,
+            )
         })
-        .collect())
+        .collect::<Vec<_>>();
+
+    Ok(accounts)
 }
